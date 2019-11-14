@@ -16,11 +16,15 @@ namespace TriviaAPIConsumer
         static TriviaClient()
         {
             // Initialize all HttpClient settings
+
+            // Base address must end in '/' to use relative paths like in GetAsync()
+            // https://stackoverflow.com/questions/23438416/why-is-httpclient-baseaddress-not-working
+            client.BaseAddress = new Uri("https://opentdb.com/");
         }
 
         public async Task<string> GetTriviaQuestions()
         {
-            HttpResponseMessage response = await client.GetAsync("https://opentdb.com/api.php?amount=5");
+            HttpResponseMessage response = await client.GetAsync("api.php?amount=5");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
