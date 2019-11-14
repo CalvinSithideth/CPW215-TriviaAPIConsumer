@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TriviaAPIConsumer
@@ -14,11 +15,33 @@ namespace TriviaAPIConsumer
 
             Console.WriteLine("Recieved trivia questions. \n");
 
-            Console.WriteLine(result.results[0].question);
-            Console.WriteLine(result.results[0].incorrect_answers);
-            Console.WriteLine(result.results[0].correct_answer);
+            // Print out each question one by one, followed by their answers, then the correct answer
+            DisplayQuestions(result.results);
 
             Console.ReadKey();
+        }
+
+        static void DisplayQuestions(List<Result> questionList)
+        {
+            foreach (var q in questionList)
+            {
+                Console.WriteLine($"{q.category}\t{q.QuestionType}\t{q.difficulty}");
+                Console.WriteLine(q.QuestionText + "\n\n");
+
+                foreach (var answer in q.IncorrectAnswer)
+                {
+                    Console.WriteLine(answer);
+                }
+                Console.WriteLine(q.CorrectAnswer);
+
+                Console.WriteLine("Hit a key to show the correct answer");
+                Console.ReadKey();
+                Console.WriteLine();
+                Console.WriteLine("The correct answer is " + q.CorrectAnswer);
+                Console.ReadKey();
+                Console.WriteLine();
+                Console.WriteLine("\n\n");
+            }
         }
     }
 }
