@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace TriviaAPIConsumer
 {
@@ -22,13 +23,15 @@ namespace TriviaAPIConsumer
             client.BaseAddress = new Uri("https://opentdb.com/");
         }
 
-        public async Task<string> GetTriviaQuestions()
+        public async Task<TriviaResponse> GetTriviaQuestions(byte numQuestions)
         {
-            HttpResponseMessage response = await client.GetAsync("api.php?amount=5");
+            HttpResponseMessage response = await client.GetAsync($"api.php?amount={numQuestions}");
             if (response.IsSuccessStatusCode)
             {
                 string data = await response.Content.ReadAsStringAsync();
-                return data;
+                TriviaResponse result = JsonConvert.DeserializeObject<TriviaResponse>(data);
+
+                return result;
             }
             else
             {   // If not successful, null is returned
